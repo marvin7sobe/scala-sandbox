@@ -89,6 +89,10 @@ object Main {
     //loop statement from 1 to 9
     for (i <- 1 until 10) i
 
+    val capitals: Map[String, String] = Map("Kyiv" -> "Ukraine", "Moscow" -> "Russia")
+    for ((city, country) <- capitals) {
+      println(country + " has capital " + city)
+    }
 
     println("While loop example:")
     var a = 0
@@ -341,7 +345,17 @@ object Main {
       // if match did not find MatchError is thrown, so default should be present in this case
       case _ => "default value"
     }
+
+    def describe(x: Any) = {
+      x match {
+        case 5 => "five"
+        case true => "truth"
+        case "help" => "hi"
+        case _ => "something else"
+      }
+    }
     println(b)
+    println(describe(5))
   }
 
   def caseClassesAndPatternMatching {
