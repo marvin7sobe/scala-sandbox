@@ -2,7 +2,8 @@ package caseclasses
 
 object CaseClasses {
 
-  abstract class Expr
+  //sealed keyword is used by compiler to warn when not all classes are used in match operator
+  sealed abstract class Expr
 
   case class Var(name: String) extends Expr
 
@@ -78,6 +79,10 @@ object CaseClasses {
       case (a, b, c) => println("matched tuple " + a + b + c)
       case _ =>
     }
+
+    //pattern match in tuple
+    val myTuple = ("string", 12)
+    val (str, number) = myTuple
 
     //type matching
     val x: Any = "123"
