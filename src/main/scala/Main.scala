@@ -106,38 +106,141 @@ object Main {
 
   def collections {
     println("Arrays and Collections:")
-    //Arrays
+
+    arrays
+    lists
+    tuples
+    sets
+    maps
+  }
+
+  private def arrays {
     val numbers = new Array[Int](2)
     numbers(0) = 10
     numbers(1) = 33
     val words = Array("one", "two", "three")
+    val list = words.toList
+    println("Convert array t list" + list)
+  }
 
-    //Lists
+  private def lists {
+    //create
     val listIsImmutable = List("how", "are", "you", "going")
 
+    //head
+    val first = listIsImmutable.head
+
+    //tail
+    val restWithoutFirst = listIsImmutable.tail
+
+    //last, init
+    //it is not a good idea to use these both because they are slower than head and tail
+    val last = listIsImmutable.last
+    val restWithoutLast = listIsImmutable.init
+
+    //take
+    val firstTwoElements = listIsImmutable.take(2)
+    println("First 2 elements from list: " + firstTwoElements)
+
+    //drop
+    val restWithoutFirstTwoElements = listIsImmutable.drop(2)
+    println("Rest without first 2 elements from list: " + restWithoutFirstTwoElements)
+
+    //splitAt
+    val splitedList: (List[String], List[String]) = listIsImmutable.splitAt(1) // //(List(how),List(are, you, going))
+    println("Splited lists at index 1: " + splitedList)
+
+    //getByIndex
+    val elementAtIndex = listIsImmutable(2)
+    println("Get element from list by index 2: " + elementAtIndex)
+
+    //zipWithIndex
+    val itemsWithIndex = listIsImmutable.zipWithIndex
+    println("Zipped list elements with idexes: " + itemsWithIndex) // List((how,0), (are,1), (you,2), (going,3))
+
+    //mkString
+    println("Making string from list: " + listIsImmutable.mkString("{", ",", "}"))
+    println("Making string from list (separator only): " + listIsImmutable.mkString(","))
+
+    //concatenate
     val list1 = List(1, 2, 3)
     val list2 = List(4, 5)
     val concatenatedList = list1 ::: list2
     println("Concatenated list:")
     concatenatedList.foreach(x => print(x + " "))
 
+    //add to begining
     val twoThree = List(2, 3)
     println("\nAdding element to list:")
     val oneTwoThree = 1 :: twoThree
     oneTwoThree.foreach(x => print(x + " "))
 
+    //add to end
+    val twoThreeFourth = twoThree ::: List(4)
+    println()
+    twoThreeFourth.foreach(x => print(x + " "))
+
+    //create
     println("\nCreating list just adding elements to Nil:")
     val oneTwoThreeFourth = 1 :: 2 :: 3 :: 4 :: Nil
     oneTwoThreeFourth.foreach(x => print(x + " "))
 
+    //to array
+    val array = List(1, 2, 3).toArray
+    println("Convert List to arrray: " + array)
+
+    //filter
+    val filteredList = listIsImmutable.filter(x => x.length == 3)
+    println("Filtered list: " + filteredList)
+
+    //find
+    val find: Option[String] = listIsImmutable.find(x => x.length == 3)
+    println("Find first element in list: " + find.get)
+
+    //partition
+    val pair: (List[String], List[String]) = listIsImmutable.partition(x => x.length == 3)
+    println("Partition list example, predicate true: " + pair._1)
+    println("Partition list example, predicate false: " + pair._2)
+
+    //exists
+    listIsImmutable.exists(x => x.length == 3)
+
+    // /:
+    val l = List(11, 2, 33)
+    val sum = (0 /: l)(_ + _) // 0+11+2+33
+    val multiply = (1 /: l)(_ * _) // 1*11*2*33
+    val string = ("" /: l)(_ + ", " + _)//, 11, 2, 33
+    println(":/ operator= " + string)
+
+    // :\ - similar to previous but /: left fold whereas :\ - right fold
+    val sum1 = (l:\0)(_ + _) // 0+11+2+33
+    val multiply1 = (l:\1)(_ * _) // 1*11*2*33
+    val string1 = (l:\"")(_ + ", " + _)//11, 2, 33,
+    println("\\: operator= " + string1)
+
+    //sortWith
+    val sorted = List(10,4,2,3,5,7,50,40).sortWith((f1,f2)=>f1<f2)
+    println("Sorted list: " +sorted)
+
+    //factory methods and methods from Object class
+    val secondItem1 = listIsImmutable(2)
+    val secondItem2 = listIsImmutable.apply(2)
+    val fromOneToFourth = List.range(1,5)
+    val fromOneToNineWithStepTwo = List.range(1,10,2)
+    val filled1 = List.fill(5)("hello") // 5 elements of "hello"
+    val filled2 = List.fill(2, 3)('b') //List(List(b, b, b), List(b, b, b))
+  }
+
+  private def tuples {
     //Tuple
     println("\nTuple contains elements of  different types:")
     val tupleContainsDifferentObjects = ("first item has 1 index", 2, true)
     println(tupleContainsDifferentObjects._1)
     println(tupleContainsDifferentObjects._2)
     println(tupleContainsDifferentObjects._3)
+  }
 
-    //Set
+  private def sets {
     println("Set example:")
     import scala.collection.mutable.Set
     var moviesSet = Set("Movie1", "Movie2")
@@ -145,8 +248,9 @@ object Main {
     moviesSet += "Movie4"
     moviesSet.+=("Movie5")
     moviesSet.foreach(x => print(x + " "))
+  }
 
-    //Map
+  private def maps {
     println("\nMap example:")
     import scala.collection.mutable.Map
     val map = Map[Int, String]()
