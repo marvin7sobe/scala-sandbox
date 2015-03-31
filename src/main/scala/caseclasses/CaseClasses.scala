@@ -62,6 +62,17 @@ object CaseClasses {
       case _ => // can be empty
     }
 
+    val fruits: List[String] = List("apple", "tomato", "orange", "pear")
+    val a :: b :: rest = fruits
+    println("list pattern match assigning elements a=" + a + " b=" + b + " rest=" + rest)
+
+    fruits match {
+      case x :: fruitsWithoutHead => println("list pattern match extracting head x=" + x + " rest=" + fruitsWithoutHead)
+    }
+    fruits match {
+      case first :: second :: rest => println("list pattern match extracting 2 first items x=" + first + " second=" + second + " rest=" + rest)
+    }
+
     //matches any tuple with 3 params
     (1, 2, 3) match {
       case (a, b, c) => println("matched tuple " + a + b + c)
