@@ -5,6 +5,9 @@ import caseclasses.CaseClasses
 import inheritance.Spiral
 import traits.{Queues, Traits}
 
+import scala.collection.mutable
+import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+
 object Main {
   def main(args: Array[String]): Unit = {
     rationalNumbers
@@ -108,7 +111,9 @@ object Main {
     println("Arrays and Collections:")
 
     arrays
+    arrayBuffer
     lists
+    listBuffer
     tuples
     sets
     maps
@@ -121,6 +126,16 @@ object Main {
     val words = Array("one", "two", "three")
     val list = words.toList
     println("Convert array t list" + list)
+  }
+
+  private def arrayBuffer {
+    val buf = new ArrayBuffer[Int]
+    buf += 2
+    buf += 3
+    1 +=: buf
+    val first = buf(0)
+    val array = buf.toArray
+    println("Appending and prepending to ArrayBuffer: " + array.mkString(" "))
   }
 
   private def lists {
@@ -229,6 +244,16 @@ object Main {
     val fromOneToNineWithStepTwo = List.range(1,10,2)
     val filled1 = List.fill(5)("hello") // 5 elements of "hello"
     val filled2 = List.fill(2, 3)('b') //List(List(b, b, b), List(b, b, b))
+  }
+
+  private def listBuffer {
+    val buf = new ListBuffer[Int]
+    buf += 2
+    buf += 3
+    1 +=: buf // adds 1 to the first position ibn buffer
+    val first = buf(0)
+    val list = buf.toList
+    println("Appending and prepending to ListBuffer is done in constant time: " + list)
   }
 
   private def tuples {
