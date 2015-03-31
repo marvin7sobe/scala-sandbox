@@ -263,30 +263,64 @@ object Main {
     println(tupleContainsDifferentObjects._1)
     println(tupleContainsDifferentObjects._2)
     println(tupleContainsDifferentObjects._3)
+
+    val (a, b, c) = tupleContainsDifferentObjects
+    println("Pattern match example for tuple: " + a + " " + b + " " + c)
   }
 
   private def sets {
     println("Set example:")
+    //scala has mutable and immutable versions of Set and Map
+    //by default when you write val s = Set() you are getting immutable Set instance (the same applied to maps)
+    //immutable means that result of add operation will return new instance with added item
+    //if you want to get mutable instance you must import directly from mutable package
     import scala.collection.mutable.Set
-    var moviesSet = Set("Movie1", "Movie2")
-    moviesSet = moviesSet + "Movie3"
-    moviesSet += "Movie4"
-    moviesSet.+=("Movie5")
-    moviesSet.foreach(x => print(x + " "))
+    val mutableMoviesSet = Set("Movie1", "Movie2")
+    mutableMoviesSet += "Movie3" //link to set will stay the same so we can use += method on val variable
+    mutableMoviesSet.+=("Movie5")
+    mutableMoviesSet -= "Movie3"
+    mutableMoviesSet ++= List("Movie11", "Movie12")
+    mutableMoviesSet --= List("Movie1", "Movie2")
+    println("Mutable set example: " + mutableMoviesSet.mkString(" "))
+    val l = mutableMoviesSet.toList
+
+    //immutable
+    var immutableCarsSet = scala.collection.immutable.Set[String]()
+    immutableCarsSet += "audi" //new instance will be created and assigned to immutableCarsSet variable so we can not use var for this variable
+    immutableCarsSet += "volvo"
+    immutableCarsSet ++= List("volga", "slavuta")
+    println("Immutable set example: " + immutableCarsSet.mkString(" "))
+
+    //sorted
+    import scala.collection.immutable.TreeSet
+    val sortedSet = TreeSet(60, 41, 3, 22, 2, 11, 55, 3, 5, 3, 5, 6, 546, 95)
+    println("TreeSet: " + sortedSet.mkString(" "))
   }
 
   private def maps {
-    println("\nMap example:")
+    println("Map example:")
     import scala.collection.mutable.Map
     val map = Map[Int, String]()
     map += (0 -> "Get equipment")
     map += (1 -> "Go to island")
+    map -= 1 //removes element by key
+    map(1) = "Go to island by plane"
     map += (2 -> "find treasure")
     map += (3 -> "buy all what you want")
+    map ++= List(4 -> "travel", 5 -> "be happy")
+    map --= List(4, 5)
+    map.contains(3)
+    map.keySet
+    map.values
+    map.isEmpty
     println(map(2))
 
     println("Adding elements to map from constructor")
     val map2 = Map[Int, String](0 -> "Get equipment", 1 -> "Go to island")
+
+    import scala.collection.immutable.TreeMap
+    val sorted = TreeMap[Int, String](22 -> "22", 11 -> "11", 4 -> "4")
+    println("TreeMap: " + sorted.mkString(", "))
   }
 
   def matchOperator {
