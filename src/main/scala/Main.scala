@@ -197,7 +197,7 @@ object Main {
     oneTwoThree.foreach(x => print(x + " "))
 
     //add to end
-    val twoThreeFourth = twoThree ::: List(4)
+    val twoThreeFourth = twoThree :+ 4
     println()
     twoThreeFourth.foreach(x => print(x + " "))
 
