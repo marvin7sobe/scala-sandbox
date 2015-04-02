@@ -2,6 +2,7 @@ import java.io._
 import java.util.Date
 
 import caseclasses.CaseClasses
+import generics.MyQueueTest
 import inheritance.Spiral
 import traits.{Queues, Traits}
 
@@ -21,6 +22,7 @@ object Main {
     inheritance
     importsAndPackages
     gettersAndSetters
+    genericsAndInformationHiding
   }
 
   def rationalNumbers {
@@ -580,5 +582,9 @@ object Main {
     def minute: Int = m
     def minute_=(x: Int) {m = x}
 
+  }
+
+  def genericsAndInformationHiding {
+    MyQueueTest.execute
   }
 }
