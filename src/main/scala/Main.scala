@@ -187,28 +187,24 @@ object Main {
     val list1 = List(1, 2, 3)
     val list2 = List(4, 5)
     val concatenatedList = list1 ::: list2
-    println("Concatenated list:")
-    concatenatedList.foreach(x => print(x + " "))
+    println("Concatenated list: " + concatenatedList)
 
     //add to begining
     val twoThree = List(2, 3)
-    println("\nAdding element to list:")
     val oneTwoThree = 1 :: twoThree
-    oneTwoThree.foreach(x => print(x + " "))
+    println("Added element to begin of list: " + oneTwoThree)
 
     //add to end
     val twoThreeFourth = twoThree :+ 4
-    println()
-    twoThreeFourth.foreach(x => print(x + " "))
+    println("Added element to end of list: " + twoThreeFourth)
 
     //create
-    println("\nCreating list just adding elements to Nil:")
     val oneTwoThreeFourth = 1 :: 2 :: 3 :: 4 :: Nil
-    oneTwoThreeFourth.foreach(x => print(x + " "))
+    println("Created list just appending elements to Nil: " + oneTwoThreeFourth)
 
     //to array
     val array = List(1, 2, 3).toArray
-    println("Convert List to arrray: " + array)
+    println("Convert List to arrray: " + array.mkString(" "))
 
     //filter
     val filteredList = listIsImmutable.filter(x => x.length == 3)
