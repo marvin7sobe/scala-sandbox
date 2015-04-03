@@ -25,6 +25,7 @@ object Main {
     gettersAndSetters
     genericsAndInformationHiding
     abstraction
+    enumeration
   }
 
   def rationalNumbers {
@@ -583,5 +584,21 @@ object Main {
 
   def abstraction {
     Abstraction.test()
+  }
+
+  def enumeration {
+    object Direction extends Enumeration {
+      val South, East, West, North = Value
+      //      val South = Value // its id=0
+      //      val East = Value("east")
+      //      val West = Value
+      //      val North = Value
+    }
+    
+    println("Get particular enumeration value: " + Direction.East)
+    println("Get particular enumeration by id: " + Direction(2))
+    print("Loop through enumeration values: ")
+    for (e <- Direction.values) print(e + " ");
+    println()
   }
 }
