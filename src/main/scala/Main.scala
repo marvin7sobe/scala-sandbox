@@ -2,7 +2,7 @@ import java.io._
 import java.util.Date
 
 import caseclasses.CaseClasses
-import generics.MyQueueTest
+import generics.{GenericsWithBounds, MyQueueTest}
 import inheritance.Spiral
 import traits.{Queues, Traits}
 
@@ -582,5 +582,6 @@ object Main {
 
   def genericsAndInformationHiding {
     MyQueueTest.execute
+    GenericsWithBounds.test
   }
 }
