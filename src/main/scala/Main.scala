@@ -26,6 +26,7 @@ object Main {
     genericsAndInformationHiding
     abstraction
     enumeration
+    implicitConversions
   }
 
   def rationalNumbers {
@@ -594,11 +595,60 @@ object Main {
       //      val West = Value
       //      val North = Value
     }
-    
+
     println("Get particular enumeration value: " + Direction.East)
     println("Get particular enumeration by id: " + Direction(2))
     print("Loop through enumeration values: ")
     for (e <- Direction.values) print(e + " ");
     println()
+  }
+
+  def implicitConversions {
+    //implicit conversion must be in scope where conversion operation is needed
+    //you can define conversions in separate object and import them
+    //conversions from scala.Predef are imported automatically to each object/class
+    //look at the scala.Predef.ArrowAssoc class, it makes arrow (->) syntax for map
+    //only one conversion is used at a time - compiler will never rewrite x + y to convert1(convert2(x)) + y
+    //if explicit code works than implicit conversion will not be used
+
+    implicit def list2String(l: List[Any]):String = l.mkString(" ")
+    val a: String = List(1, 2, 3) + " 4 5 6"
+    println("Implicit conversion List to String: " + a)// 1 2 3 4 5 6
+
+    import MyConversions.int2CharsList
+    val str:String = List('0'):::123
+    println("Implicit conversion Int to List of Chars and than List to String: " + str)
+
+    import MyConversions.double2Int
+    val r:Int = 3.5 // type conversion
+    println("Implicit conversion Double to Int: "+ r)
+
+    //implicit parameters
+    class PrefferedDrink(val s:String)
+    implicit val drink = new PrefferedDrink("tea")
+    def greet(name:String)(implicit drink: PrefferedDrink): Unit ={
+      println("Hi "+name+ ", would you like to drink "+ drink.s)
+    }
+    greet("John")
+
+    //view bound
+    //T <% Ordered[T] this is not the same as T <: Ordered[T]
+    //having T <% Ordered[T] in signature you can pass for example List of Int's but Int is not subclass of Ordered[Int]
+    def maxList[T <% Ordered[T]](elements: List[T]): T =
+      elements match {
+        case List() =>
+          throw new IllegalArgumentException("empty list!")
+        case List(x) => x
+        case x :: rest =>
+          val maxRest = maxList(rest)
+          if (x > maxRest) x
+          else maxRest
+      }
+    println("Max in List(1,2,55,66,5,4) is:"+ maxList(List(1,2,55,66,5,4)))
+  }
+
+  object MyConversions{
+    implicit def int2CharsList(i:Int):List[Char] = i.toString.toCharArray.toList
+    implicit def double2Int(x:Double):Int = x.toInt
   }
 }
