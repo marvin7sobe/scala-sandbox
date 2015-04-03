@@ -1,6 +1,7 @@
 import java.io._
 import java.util.Date
 
+import absctaction.Abstraction
 import caseclasses.CaseClasses
 import generics.{GenericsWithBounds, MyQueueTest}
 import inheritance.Spiral
@@ -23,6 +24,7 @@ object Main {
     importsAndPackages
     gettersAndSetters
     genericsAndInformationHiding
+    abstraction
   }
 
   def rationalNumbers {
@@ -577,5 +579,9 @@ object Main {
   def genericsAndInformationHiding {
     MyQueueTest.execute
     GenericsWithBounds.test
+  }
+
+  def abstraction {
+    Abstraction.test()
   }
 }
