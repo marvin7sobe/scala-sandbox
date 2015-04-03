@@ -562,22 +562,16 @@ object Main {
   }
 
   def gettersAndSetters{
+    class Time {
+      var hour: Int = _ // assigns default value to variable. For Itn - 0, for boolean - false, for reference - null
+      var minute: Int = _
+    }
+
     var t1, t2 = new Time
     t1.hour = 12 // set hour to 12
+    t1.hour_=(13) // set hour to 13
     t1.minute = 10 // set minute to 10
     println("Get time using getters: " +t1.hour+" : "+t1.minute) // get hour and minute
-  }
-
-  class Time {
-    private var h: Int = _ // assigns default value to variable. For Itn - 0, for boolean - false, for reference - null
-    private var m: Int = _
-
-    def hour: Int = h// getter
-    def hour_=(x: Int) {h = x}// setter
-
-    def minute: Int = m
-    def minute_=(x: Int) {m = x}
-
   }
 
   def genericsAndInformationHiding {
