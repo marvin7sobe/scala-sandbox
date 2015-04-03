@@ -26,6 +26,17 @@ object GenericsWithBounds {
     for (fruit <- items) println("Fruit color from set: " + fruit.color)
   }
 
+  class Printer{
+    def print() {println("Structural subtyping: print operation is called")}
+    def close() {println("Closed printer port")}
+  }
+
+  //structural subtyping
+  def use[T <: {def close():Unit}, S](obj: T)(operation: T => S) = {
+    val result = operation(obj)
+    obj.close()
+  }
+
   def test(): Unit = {
     printFruitsColor(Set(new Apple("green", 10), new Pear("yellow")))
 
@@ -35,6 +46,7 @@ object GenericsWithBounds {
     //c = c.put(new Apple("grren", 12))// if uncomment - compile error because only supertypes of Pear can be added
     println("Fruit color from container: "+c.head.color)
 
+    use(new Printer)(_.print)
   }
 
 }
