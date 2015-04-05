@@ -119,9 +119,42 @@ object Main {
 
   def collections {
     println("Arrays and Collections:")
-
+    /**
+     *Collections Hierarchy
+     *
+     *Traversable
+        Iterable
+          Seq
+            IndexedSeq
+              Vector
+              ResizableArray
+              GenericArray
+            LinearSeq
+              MutableList
+              List
+              Stream
+            Buffer
+              ListBuffer
+              ArrayBuffer
+          Set
+            SortedSet
+              TreeSet
+            HashSet (mutable)
+            LinkedHashSet
+            HashSet (immutable)
+            BitSet
+            EmptySet, Set1, Set2, Set3, Set4
+          Map
+            SortedMap
+              TreeMap
+            HashMap (mutable)
+            LinkedHashMap (mutable)
+            HashMap (immutable)
+            EmptyMap, Map1, Map2, Map3, Map4
+     */
     arrays
     arrayBuffer
+    seq
     lists
     listBuffer
     tuples
@@ -148,6 +181,11 @@ object Main {
     println("Appending and prepending to ArrayBuffer: " + array.mkString(" "))
   }
 
+  private def seq {
+    val s = Seq(1,2,3)
+    println("Sequence example: " + s.mkString(" "))
+  }
+
   private def lists {
     //create
     val listIsImmutable = List("how", "are", "you", "going")
@@ -167,6 +205,10 @@ object Main {
     val firstTwoElements = listIsImmutable.take(2)
     println("First 2 elements from list: " + firstTwoElements)
 
+    //takeRight
+    val lastThreeElements = listIsImmutable.takeRight(3)
+    println("Last 3 elements from list: " + lastThreeElements)
+
     //drop
     val restWithoutFirstTwoElements = listIsImmutable.drop(2)
     println("Rest without first 2 elements from list: " + restWithoutFirstTwoElements)
@@ -179,9 +221,23 @@ object Main {
     val elementAtIndex = listIsImmutable(2)
     println("Get element from list by index 2: " + elementAtIndex)
 
+    //zip
+    //combines pair of elements on corresponding positions
+    //longer collection will be reduced
+    val a1 = List(1, 2, 3, 4, 5, 6)
+    val b1 = List("a", "b", "c")
+    println("Zip: " + a1.zip(b1)) // List((1,a), (2,b), (3,c))
+
+    //zipAll
+    //xx.zipAll(yy, x, y)
+    //shorter collection will be extended with x element if its xx or with y if its yy
+    val xx = List(1, 2, 3, 4, 5, 6)
+    val yy = List("a", "b", "c")
+    println("Zip all:" + xx.zipAll(yy, 10, "a++")) // List((1,a), (2,b), (3,c), (4,a++), (5,a++), (6,a++))
+
     //zipWithIndex
     val itemsWithIndex = listIsImmutable.zipWithIndex
-    println("Zipped list elements with idexes: " + itemsWithIndex) // List((how,0), (are,1), (you,2), (going,3))
+    println("Zipped list elements with indexes: " + itemsWithIndex) // List((how,0), (are,1), (you,2), (going,3))
 
     //mkString
     println("Making string from list: " + listIsImmutable.mkString("{", ",", "}"))
@@ -191,7 +247,13 @@ object Main {
     val list1 = List(1, 2, 3)
     val list2 = List(4, 5)
     val concatenatedList = list1 ::: list2
-    println("Concatenated list: " + concatenatedList)
+    println("Concatenated list v1: " + concatenatedList.mkString(" "))
+
+    //concatenate v2
+    val l0 = List(1, 2, 3)
+    val l1 = List(4, 5)
+    val combined = l0 ++ l1
+    println("Concatenated list v2: " + combined.mkString(" "))
 
     //add to begining
     val twoThree = List(2, 3)
@@ -210,9 +272,22 @@ object Main {
     val array = List(1, 2, 3).toArray
     println("Convert List to arrray: " + array.mkString(" "))
 
+    //count
+    val count = listIsImmutable.count(x => x.length == 3)
+    println("Count number of elements that satisfy predicate: " + count)
+
     //filter
     val filteredList = listIsImmutable.filter(x => x.length == 3)
-    println("Filtered list: " + filteredList)
+    println("Filtered list: " + filteredList.mkString(" "))
+
+    //filterNot
+    val filterNot = listIsImmutable.filterNot(x => x.length == 3)
+    println("Filtered list by filterNot: " + filterNot.mkString(" "))
+
+    //isEmpty, size, notEmpty
+    println("size list: " + listIsImmutable.size)
+    println("isEmpty list: " + listIsImmutable.isEmpty)
+    println("nonEmpty list: " + listIsImmutable.nonEmpty)
 
     //find
     val find: Option[String] = listIsImmutable.find(x => x.length == 3)
@@ -243,6 +318,25 @@ object Main {
     val sorted = List(10,4,2,3,5,7,50,40).sortWith((f1,f2)=>f1<f2)
     println("Sorted list: " +sorted)
 
+    //sum, min, max
+    val list = List(1, 2, 3, 4, 5, 6, 7)
+    println("List Sum=" + list.sum + " min=" + list.min + " max=" + list.max)
+
+    //grouped
+    val grouped = list.grouped(3)
+    println("Grouped list by 3 elements: " + grouped.next() + " " + grouped.next() + " " + grouped.next())
+
+    //update
+    val c = List(1, 2, 3, 4, 6)
+    val b = c.updated(0, 34)
+    println("Update element in collection: " + b.mkString(" "))
+
+    //patch
+    val c0 = c.patch(0, Nil, 2) // removed 2 elements starting from 0
+    println("Patch list (removed 2 elements starting from 0): " + c0)
+    val c1 = c.patch(0, Seq(23, 24), 2)
+    println("Patch list (replaced first 2 elements with Seq(22,24)): " + c1)
+
     //factory methods and methods from Object class
     val secondItem1 = listIsImmutable(2)
     val secondItem2 = listIsImmutable.apply(2)
@@ -256,10 +350,17 @@ object Main {
     val buf = new ListBuffer[Int]
     buf += 2
     buf += 3
+    buf ++= List(4,5,6,7)
     1 +=: buf // adds 1 to the first position ibn buffer
+    List(-2, -1, 0) ++=: buf
     val first = buf(0)
-    val list = buf.toList
-    println("Appending and prepending to ListBuffer is done in constant time: " + list)
+    val list = buf.toList //-2, -1, 0, 1, 2, 3, 4, 5, 6, 7
+    println("Appending and prepending to ListBuffer: " + buf.toList)
+
+    buf.remove(2)//remove element at index 2
+    buf.remove(3,2)//remove 2 elements starting from index 3
+    //-2, -1, 1, 4, 5, 6, 7
+    println("Remove from ListBuffer: " + buf.toList)
   }
 
   private def tuples {
