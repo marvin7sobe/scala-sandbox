@@ -163,6 +163,7 @@ object Main {
   }
 
   private def arrays {
+    println("Array examples: ")
     val numbers = new Array[Int](2)
     numbers(0) = 10
     numbers(1) = 33
@@ -172,6 +173,7 @@ object Main {
   }
 
   private def arrayBuffer {
+    println("ArrayBuffer examples: ")
     val buf = new ArrayBuffer[Int]
     buf += 2
     buf += 3
@@ -182,11 +184,13 @@ object Main {
   }
 
   private def seq {
+    println("Sequence examples: ")
     val s = Seq(1,2,3)
-    println("Sequence example: " + s.mkString(" "))
+    println("Sequence: " + s.mkString(" "))
   }
 
   private def lists {
+    println("List examples:")
     //create
     val listIsImmutable = List("how", "are", "you", "going")
 
@@ -347,6 +351,7 @@ object Main {
   }
 
   private def listBuffer {
+    println("ListBuffer examples:")
     val buf = new ListBuffer[Int]
     buf += 2
     buf += 3
@@ -364,6 +369,7 @@ object Main {
   }
 
   private def tuples {
+    println("Tuple examples:")
     //Tuple
     println("\nTuple contains elements of  different types:")
     val tupleContainsDifferentObjects = ("first item has 1 index", 2, true)
@@ -376,36 +382,83 @@ object Main {
   }
 
   private def sets {
-    println("Set example:")
+    println("Set examples:")
     //scala has mutable and immutable versions of Set and Map
     //by default when you write val s = Set() you are getting immutable Set instance (the same applied to maps)
     //immutable means that result of add operation will return new instance with added item
     //if you want to get mutable instance you must import directly from mutable package
+    //mutable sets uses hash table to store elements
     import scala.collection.mutable.Set
-    val mutableMoviesSet = Set("Movie1", "Movie2")
-    mutableMoviesSet += "Movie3" //link to set will stay the same so we can use += method on val variable
-    mutableMoviesSet.+=("Movie5")
-    mutableMoviesSet -= "Movie3"
-    mutableMoviesSet ++= List("Movie11", "Movie12")
-    mutableMoviesSet --= List("Movie1", "Movie2")
-    println("Mutable set example: " + mutableMoviesSet.mkString(" "))
-    val l = mutableMoviesSet.toList
+    val mutable = Set("Movie1", "Movie2")
+    //add
+    mutable += "Movie3" //link to set will stay the same so we can use += method on val variable
+    mutable +=("Movie4", "Movie5", "Movie6", "Movie7", "Movie8")
+    mutable ++= List("Movie11", "Movie12")
+    println("Added items to set: " + mutable.mkString(" "))
+
+    //add
+    val wasAdded = mutable.add("Movie3")
+    println("Add to set that returns boolean as operation result: " + wasAdded)
+
+    //remove
+    mutable -= "Movie3"
+    mutable --= List("Movie1", "Movie2")
+    println("Removed items from set: " + mutable.mkString(" "))
+
+    //remove
+    val wasRemoved = mutable.remove("Movie6")
+    println("Remove item from set that returns boolean result: " + wasRemoved)
+
+    //update (add element to set if true)
+    mutable("Movie3") = true
+    println("Update element(add to set): " + mutable.mkString(" "))
+
+    //update (remove element from set if false)
+    mutable("Movie7") = false
+    println("Update element(remove from set): " + mutable.mkString(" "))
+
+    //clone
+    val cloned = mutable.clone()
+    println("Cloned set: " + cloned.mkString(" "))
+
+    val mutable2 = Set("Movie4", "Movie5", "Movie20", "Movie21", "Movie22")
+
+    //intersection
+    val intersection = mutable intersect mutable2
+    //val intersection = mutable & mutableMoviesSet2
+    println("Intersection of 2 sets: " + intersection.mkString(" "))
+
+    //union
+    val union = mutable union mutable2
+    //val union = mutable | mutableMoviesSet2
+    println("Union of 2 sets: " + union.mkString(" "))
+
+    //diff
+    val diff = mutable diff mutable2
+    //val diff = mutable &~ mutableMoviesSet2
+    println("Diff of 2 sets: " + diff.mkString(" "))
+
+    //clear
+    mutable2.clear()
+
 
     //immutable
-    var immutableCarsSet = scala.collection.immutable.Set[String]()
-    immutableCarsSet += "audi" //new instance will be created and assigned to immutableCarsSet variable so we can not use var for this variable
-    immutableCarsSet += "volvo"
-    immutableCarsSet ++= List("volga", "slavuta")
-    println("Immutable set example: " + immutableCarsSet.mkString(" "))
+    //immutable sets uses hash tree to store elements if elements size more than 4
+    var immutable = scala.collection.immutable.Set[String]()
+    immutable += "audi" //new instance will be created(it means new link) and assigned to mutable variable so we can not use val for this variable
+    immutable += "volvo"
+    immutable ++= List("volga", "slavuta")
+    println("Immutable set example: " + immutable.mkString(" "))
 
     //sorted
+    //black-red tree is used to store elements
     import scala.collection.immutable.TreeSet
     val sortedSet = TreeSet(60, 41, 3, 22, 2, 11, 55, 3, 5, 3, 5, 6, 546, 95)
     println("TreeSet: " + sortedSet.mkString(" "))
   }
 
   private def maps {
-    println("Map example:")
+    println("Map examples:")
     import scala.collection.mutable.Map
     val map = Map[Int, String]()
     map += (0 -> "Get equipment")
