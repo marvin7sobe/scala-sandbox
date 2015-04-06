@@ -460,20 +460,47 @@ object Main {
   private def maps {
     println("Map examples:")
     import scala.collection.mutable.Map
-    val map = Map[Int, String]()
-    map += (0 -> "Get equipment")
-    map += (1 -> "Go to island")
-    map -= 1 //removes element by key
-    map(1) = "Go to island by plane"
-    map += (2 -> "find treasure")
-    map += (3 -> "buy all what you want")
-    map ++= List(4 -> "travel", 5 -> "be happy")
-    map --= List(4, 5)
-    map.contains(3)
-    map.keySet
-    map.values
-    map.isEmpty
-    println(map(2))
+    val mutable = Map[Int, String]()
+    //add
+    mutable += (0 -> "Get equipment")
+    mutable +=(1 -> "Go to island", 2 -> "find treasure", 3 -> "buy all what you want")
+    mutable ++= List(4 -> "travel", 5 -> "be happy")
+    println("Add to map: " + mutable)
+
+    //add
+    val previousValue = mutable.put(2, "find all treasure")
+    println("Add to map that returns previous value: " + previousValue.get)
+
+    //update
+    mutable(1) = "Go to island by plane"
+    mutable += (1 -> "Go to island by big plane")
+    println("Update map element by key: " + mutable(1))
+
+    //remove
+    mutable -= 1
+    mutable --= List(4, 5)
+    println("Removed map elements by keys, left: " + mutable)
+    val previous = mutable.remove(3)
+    println("Remove from map by key and return previous value: " + previous.get)
+
+    //get
+    val itemOptional = mutable.get(33)
+    println("Get from map by not existing key: " + itemOptional.getOrElse("Item by key 33 was not found"))
+    try {
+      val item = mutable(33)
+    } catch {
+      case ex: Exception =>
+        println("Apply method throws exception if can not find element in map by key")
+    }
+
+    //getOrElseUpdate
+    mutable.getOrElseUpdate(33, "Go home")
+    println("Get element from map by key, if not found add it to map(useful for cache operations): " + mutable)
+
+    mutable.contains(3)
+    mutable.keySet
+    mutable.values
+    mutable.isEmpty
 
     println("Adding elements to map from constructor")
     val map2 = Map[Int, String](0 -> "Get equipment", 1 -> "Go to island")
