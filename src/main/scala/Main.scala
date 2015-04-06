@@ -160,6 +160,7 @@ object Main {
     tuples
     sets
     maps
+    synchronizedSetAndMap
   }
 
   private def arrays {
@@ -508,6 +509,23 @@ object Main {
     import scala.collection.immutable.TreeMap
     val sorted = TreeMap[Int, String](22 -> "22", 11 -> "11", 4 -> "4")
     println("TreeMap: " + sorted.mkString(", "))
+  }
+
+  private def synchronizedSetAndMap {
+    println("SynchronizedMap examples: ")
+    //DON'T USE THIS APPROACH that makes SynchronizedMap/SynchronizedSet via trait as it is deprecated
+    //Consider java.util.concurrent.ConcurrentHashMap as an alternative
+    import scala.collection.mutable.{HashSet, HashMap, SynchronizedMap, SynchronizedSet}
+
+    //map
+    val map = new HashMap[String, String] with SynchronizedMap[String, String]
+    map += ("1" -> "This is synchronized map")
+    println("Synchronized map example(don't use such approach): " + map)
+
+    //set
+    val set = new HashSet[String] with SynchronizedSet[String]
+    set += "First set item"
+    println("Synchronized set example(don't use such approach): " + set)
   }
 
   def matchOperator {
