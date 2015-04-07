@@ -8,6 +8,7 @@ import inheritance.Spiral
 import traits.{Queues, Traits}
 
 import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.reflect.ClassTag
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -161,6 +162,9 @@ object Main {
     sets
     maps
     synchronizedSetAndMap
+    //todo add example to views
+    //collection.view is used to perform transformations(.map .filter etc) lazily
+    //to back from view to strict collection .force method is used
   }
 
   private def arrays {
@@ -171,6 +175,17 @@ object Main {
     val words = Array("one", "two", "three")
     val list = words.toList
     println("Convert array t list" + list)
+
+    //ClassTag is required in generic array creation
+    def evenElem[T: ClassTag](x: List[T]) = {
+      val items = new Array[T](if (x.length % 2 == 0) x.length / 2 else (x.length / 2 + 1))
+      for (i <- 0 until x.length by 2) {
+        items(i / 2) = x(i)
+      }
+      items
+    }
+    val r1 = evenElem("Have are you doing doc ?".split(" ").toList)
+    println("Generic array creation: " + r1.mkString(" "))
   }
 
   private def arrayBuffer {
