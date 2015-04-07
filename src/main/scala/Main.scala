@@ -162,6 +162,7 @@ object Main {
     sets
     maps
     synchronizedSetAndMap
+    implicitJavaConversions
     //todo add example to views
     //collection.view is used to perform transformations(.map .filter etc) lazily
     //to back from view to strict collection .force method is used
@@ -530,7 +531,7 @@ object Main {
     println("SynchronizedMap examples: ")
     //DON'T USE THIS APPROACH that makes SynchronizedMap/SynchronizedSet via trait as it is deprecated
     //Consider java.util.concurrent.ConcurrentHashMap as an alternative
-    import scala.collection.mutable.{HashSet, HashMap, SynchronizedMap, SynchronizedSet}
+    import scala.collection.mutable.{HashMap, HashSet, SynchronizedMap, SynchronizedSet}
 
     //map
     val map = new HashMap[String, String] with SynchronizedMap[String, String]
@@ -541,6 +542,33 @@ object Main {
     val set = new HashSet[String] with SynchronizedSet[String]
     set += "First set item"
     println("Synchronized set example(don't use such approach): " + set)
+  }
+
+  def implicitJavaConversions {
+    //scala provides a lot of implicit conversions from java collection to scala collection and visa versa
+    //to enable them just import scala.collection.JavaConversions._
+    //it will not be created new object as result of conversion
+    //it will be created Wrapper object that will handle operations on converted collection
+    //after conversion from scala to java you can not add/remove items from result collection
+    //NotSupportedOperationExceptions will be thrown
+    //    scala                   java
+    //  Iterator        =>  java.util.Iterator
+    //  Iterator        =>  java.lang.Iterable
+    //  Iterable        =>  java.util.Enumeration
+    //  Iterable        =>  java.util.Collection
+    //  mutable.Buffer  =>  java.util.List
+    //  mutable.Set     =>  java.util.Set
+    //  mutable.Map     =>  java.util.Map
+    //  Seq             =>  java.util.List
+    //  mutable.Seq     =>  java.util.List
+    //  Set             =>  java.util.Set
+    //  Map             =>  java.util.Map
+    import scala.collection.JavaConversions._
+    val m: java.util.Map[Int, String] = Map(1 -> "String 1", 2 -> "String 2")
+    println("Get item by key from map on which implicit conversion from scala Map to Java Map was used: " + m.get(1))
+
+    val list:java.util.List[String] = List("a1", "b1")
+    println("Implicit conversion from Scala List Java List: "+list.mkString(" "))
   }
 
   def matchOperator {
