@@ -28,6 +28,7 @@ object Main {
     abstraction
     enumeration
     implicitConversions
+    extractors
   }
 
   def rationalNumbers {
@@ -322,6 +323,7 @@ object Main {
     //exists
     listIsImmutable.exists(x => x.length == 3)
 
+    //foldLeft
     // /:
     val l = List(11, 2, 33)
     val sum = (0 /: l)(_ + _) // 0+11+2+33
@@ -329,6 +331,7 @@ object Main {
     val string = ("" /: l)(_ + ", " + _)//, 11, 2, 33
     println(":/ operator= " + string)
 
+    //foldRight
     // :\ - similar to previous but /: left fold whereas :\ - right fold
     val sum1 = (l:\0)(_ + _) // 0+11+2+33
     val multiply1 = (l:\1)(_ * _) // 1*11*2*33
@@ -892,5 +895,43 @@ object Main {
   object MyConversions{
     implicit def int2CharsList(i:Int):List[Char] = i.toString.toCharArray.toList
     implicit def double2Int(x:Double):Int = x.toInt
+  }
+
+  def extractors {
+    "vova@gmail.com" match {
+      case EMail(user, domain) => println("Basic email extractor: " + user + " AT " + domain)
+      case _ => println("not an email address")
+    }
+
+    //Seq extractor
+    "net.java" match {
+      case Domain("com", "gmail") => println("gmail.com")
+      case Domain("java", "net") => println("java.net")
+      case Domain("ru", "nsn") => println("nsn.ru")
+      case Domain("net", _*) => println(".net domain")
+    }
+
+    //Email and Domain combined
+    println("Is Email vova@gmail.com in .com domain: " + isUserEmailInComDomain("vova@gmail.com"))
+    def isUserEmailInComDomain(email: String): Boolean = email match {
+      case EMail(user, Domain("com", _*)) => true
+      case _ => false
+    }
+  }
+
+  object EMail {
+    //optional method (injection)
+    //def apply(user: String, domain: String) = user + "@" + domain
+    //Extraction method that is required for extractor
+    def unapply(str: String): Option[(String, String)] = {
+      val parts = str split "@"
+      if (parts.length == 2) Some(parts(0), parts(1)) else None
+    }
+  }
+
+  object Domain{
+    def unapplySeq(whole:String):Option[Seq[String]]={
+      Some(whole.split("\\.").reverse)
+    }
   }
 }
