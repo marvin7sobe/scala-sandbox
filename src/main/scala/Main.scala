@@ -29,6 +29,7 @@ object Main {
     enumeration
     implicitConversions
     extractors
+    equalsAndHashCode
   }
 
   def rationalNumbers {
@@ -932,6 +933,48 @@ object Main {
   object Domain{
     def unapplySeq(whole:String):Option[Seq[String]]={
       Some(whole.split("\\.").reverse)
+    }
+  }
+
+  def equalsAndHashCode {
+    //hashCode method also must be overriden if you are going to override equals
+    val t1:Branch[Int] = new Branch[Int](5)
+    val t2:Branch[Int] = new Branch[Int](10)
+    val t3:Branch[Int] = new Branch[Int](5)
+    println("Comparing 2 not equal trees: " + t1.equals(t2))
+    println("Comparing 2 equal trees: " + t1.equals(t3))
+  }
+  
+  trait Tree[+T]{
+    def elem: T
+    def left:Tree[T]
+    def right: Tree[T]
+  }
+  
+  class EmptyTree extends Tree[Nothing]{
+    override def elem: Nothing = throw new NoSuchElementException("EmptyTree.elem")
+    override def left: Tree[Nothing] = throw new NoSuchElementException("EmptyTree.left")
+    override def right: Tree[Nothing] = throw new NoSuchElementException("EmptyTree.rigth")
+  }
+  
+  class Branch[+T](val elem: T, val left: Tree[T], val right: Tree[T]) extends Tree[T]{
+
+    def this(elem: T) = this(elem, new EmptyTree, new EmptyTree)
+
+    def canEqual(other: Any): Boolean = other.isInstanceOf[Branch[_]]
+
+    override def equals(other: Any): Boolean = other match {
+      case that: Branch[_] =>
+        (that canEqual this) &&
+          elem == that.elem &&
+          (if (left.isInstanceOf[EmptyTree] && that.left.isInstanceOf[EmptyTree]) true else left == that.left) &&
+          (if (right.isInstanceOf[EmptyTree] && that.right.isInstanceOf[EmptyTree]) true else right == that.right)
+      case _ => false
+    }
+
+    override def hashCode(): Int = {
+      val state = Seq(elem, left, right)
+      state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
     }
   }
 }
